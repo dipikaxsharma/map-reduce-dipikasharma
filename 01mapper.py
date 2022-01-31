@@ -4,7 +4,7 @@ from posixpath import split
 
 
 f = open("purchases.txt", "r")
-o = open("a.text","w")
+o = open("a.txt","w")
 for line in f:
    rowList = line.strip(),split("    ")
    print(rowList )
