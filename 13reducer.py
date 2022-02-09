@@ -1,22 +1,24 @@
-s = open(r"C:\Users\S530527\Documents\44517\map-reduce-dipikasharma\foodprepsort.txt","r")
-out = r"C:\Users\S530527\Documents\44517\map-reduce-dipikasharma\foodprepreduce.txt"
-
-
+import sys
 
 thisKey = ""
-thisValue = 0
-data_dict = {}
+thisValue = 0.0
 
-for line in s:
-    line_data = line.split('\t')
-    name,prep_time = line_data[0], line_data[3].rstrip()
-    if prep_time in data_dict.keys():
-        data_dict[prep_time] +=1
-    else:
-        data_dict[prep_time] = 1
+for line in sys.stdin:
+  datalist = line.strip().split('\t')
+  if (len(datalist) == 2) : 
+    name, cook_time = datalist
 
-with open(out, 'w') as f: 
-    for key, value in data_dict.items():
-        f.write('%s:%s\n' % (key, value))
+    if name != thisKey:   # we've moved to another key
+      if thisKey:
+        # output the previous key-summaryvalue result
+        print(thisKey,'\t',thisValue)
 
-s.close()
+      # start over for each new key
+      thisKey = name 
+      thisValue = 0.0
+  
+    # apply the aggregation function
+    thisValue += float(cook_time)
+
+# output the final key-summaryvalue result outside the loop
+print(thisKey,'\t',thisValue)
